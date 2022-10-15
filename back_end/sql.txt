@@ -1,0 +1,32 @@
+Customer
+- Cust_id
+- Cust_name
+- Cust_pnum
+- Cust_email
+- Cust_pword
+
+Car
+- Car_id
+- Car_brand
+- Car_model
+- Car_picFileLocation
+- Car_bodytype
+- Car_rentPrice
+- Car_quantity
+
+OrderList
+- Order_id
+- Order_dateTime
+- PickUp_dateTime
+- PickUp_address
+- DropOff_dateTime
+- DropOff_address
+- Cust_id
+- Car_id
+- Order_quantity
+
+InvoiceInfo
+- Invoice_id
+- Invoice_date
+- Order_id
+- Invoice_totalCharge
