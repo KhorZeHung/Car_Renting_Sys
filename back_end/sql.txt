@@ -5,14 +5,32 @@ Customer
 - Cust_email
 - Cust_pword
 
+CREATE TABLE Customer(
+    Cust_id int NOT NULL AUTO_INCREMENT, 
+    Cust_name varchar(50) NOT NULL, 
+    Cust_pnum varchar(13) NOT NULL UNIQUE, 
+    Cust_email varchar(50) NOT NULL UNIQUE, 
+    Cust_pword varchar(250) NOT NULL, 
+    PRIMARY KEY (Cust_id)
+);
+
 Car
 - Car_id
 - Car_brand
 - Car_model
-- Car_picFileLocation
-- Car_bodytype
+- Car_picFolderName
 - Car_rentPrice
 - Car_quantity
+
+CREATE TABLE Car(
+    Car_id int NOT NULL AUTO_INCREMENT,     
+    Car_brand varchar(50) NOT NULL,
+    Car_model varchar(50) NOT NULL,
+    Car_picFolderName varchar(50) NOT NULL,
+    Car_rentPrice float NOT NULL,
+    Car_quantity int NOT NULL,
+    PRIMARY KEY (Car_id)
+);
 
 OrderList
 - Order_id
@@ -25,8 +43,35 @@ OrderList
 - Car_id
 - Order_quantity
 
+CREATE TABLE OrderList(
+    Order_id int NOT NULL AUTO_INCREMENT,
+    Order_dateTime DATETIME NOT NULL, 
+    PickUp_dateTime DATETIME NOT NULL, 
+    PickUp_address varchar(250) NOT NULL, 
+    DropOff_dateTime DATETIME NOT NULL, 
+    DropOff_address varchar(250) NOT NULL, 
+    Cust_id int NOT NULL, 
+    Car_id int NOT NULL,
+    Order_quantity int NOT NULL default 1, 
+    PRIMARY KEY (Order_id), 
+    FOREIGN KEY (Cust_id) REFERENCES Customer(Cust_id),
+    FOREIGN KEY (Car_id) REFERENCES Car(Car_id)
+);
+
 InvoiceInfo
 - Invoice_id
 - Invoice_date
 - Order_id
 - Invoice_totalCharge
+
+CREATE TABLE InvoiceInfo(
+    Invoice_id int NOT NULL UNIQUE, 
+    Invoice_date DATETIME NOT NULL, 
+    Order_id int NOT NULL,
+    PRIMARY KEY(Invoice_id),
+    FOREIGN KEY (Order_id) REFERENCES OrderList(Order_id)
+);
+
+
+Create database
+- CREATE DATABASE Car_Renting_Sys
