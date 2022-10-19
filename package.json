@@ -1,5 +1,13 @@
 {
+  "scripts": {
+    "devStart": "nodemon back_end/index.js"
+  },
   "devDependencies": {
-    "dotnet": "^1.1.4"
+    "dotenv": "^16.0.3",
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql": "^2.18.1"
   }
 }
