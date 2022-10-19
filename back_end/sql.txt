@@ -26,7 +26,6 @@ CREATE TABLE Car(
     Car_id int NOT NULL AUTO_INCREMENT,     
     Car_brand varchar(50) NOT NULL,
     Car_model varchar(50) NOT NULL,
-    Car_picFolderName varchar(50) NOT NULL,
     Car_rentPrice float NOT NULL,
     Car_quantity int NOT NULL,
     PRIMARY KEY (Car_id)
