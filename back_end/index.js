@@ -1,32 +1,23 @@
 const express = require("express");
-const mysql = require("mysql");
-var fs = require('fs');
-
 const app = express();
-require('dotenv').config()
+const bodyParser = require("body-parser");
+require("dotenv").config();
+
+//Here we are configuring express to use body-parser as middle-ware.
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
 //variable part
-var port = 8080 
 var env = process.env;
+var port = env.PORT || 8080;
 
+//const part
+const routerCar = require("./util/router/cars.js")
 
-app.listen(port);
+app.use("/cars", routerCar);
 
-const db = mysql.createPool({
-    host: env.HOST, 
-    user: env.USER,
-    password: env.PASSWORD,
-    database: env.DATABASE,
-  });
-  
-//  check if dir exits for pic (get and post)
-
-// var checkDirExits = (dir) =>{
-//   if (!fs.existsSync(dir)){
-//     fs.mkdirSync(dir, { recursive: true });
-//     return false;
-//   }
-//   else{
-//     return true
-//   } 
-// }
+app.listen(port, (err) => {
+  if (err) {
+    return console.log("error : ", err);
+  }
+});
