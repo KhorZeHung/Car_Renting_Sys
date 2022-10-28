@@ -8,7 +8,7 @@ Customer
 CREATE TABLE Customer(
     Cust_id int NOT NULL AUTO_INCREMENT, 
     Cust_name varchar(50) NOT NULL, 
-    Cust_pnum varchar(13) NOT NULL UNIQUE, 
+    Cust_pnum varchar(15) NOT NULL UNIQUE, 
     Cust_email varchar(50) NOT NULL UNIQUE, 
     Cust_pword varchar(250) NOT NULL, 
     PRIMARY KEY (Cust_id)

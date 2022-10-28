@@ -13,8 +13,10 @@ var port = env.PORT || 8080;
 
 //const part
 const routerCar = require("./util/router/cars.js")
+const routerCustomer = require("./util/router/customer.js")
 
 app.use("/cars", routerCar);
+app.use("/customer", routerCustomer);
 
 app.listen(port, (err) => {
   if (err) {

@@ -1,18 +1,6 @@
 const express = require("express");
-const mysql = require("mysql");
 const router = express.Router();
-require("dotenv").config();
-
-//variable part
-var env = process.env;
-
-//mysql database connection
-const db = mysql.createPool({
-  host: env.HOST,
-  user: env.USER,
-  password: env.PASSWORD,
-  database: env.DATABASE,
-});
+const db = require("../function/dbConnection.js");
 
 router
   .route("/")
