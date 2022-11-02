@@ -4,6 +4,8 @@ const router = express.Router();
 const db = require("../function/dbConnection.js");
 const validateCustInfo = require("../function/validateCustInfo.js"); //import function to validate customer
 const moment = require("moment");
+const crypto = require("../function/cryptoHandle.js");
+const dateHandle = require("../function/dateHandle.js");
 
 //function for customer to update self
 router.put(
@@ -67,18 +69,27 @@ router.post(
 
 function getCustOrderInfo(req, res, next) {
   const Cust_id = req.mysqlRes[0].Cust_id;
-  const select_query = "SELECT * FROM OrderList WHERE Cust_id = ?";
+  const select_query =
+    "SELECT * FROM OrderList WHERE Cust_id = ?";
   db.query(select_query, [Cust_id], (err, result) => {
     if (err) return res.status(500).send(err);
     for (var a = 0; a < result.length; a++) {
-      const formatedPickUp = moment(result[a].PickUp_dateTime).format();
-      const formatedDropOff = moment(result[a].DropOff_dateTime).format();
-      result[a].PickUp_dateTime =
-        formatedPickUp.slice(0, 10) + " " + formatedPickUp.slice(11, 19);
-      result[a].DropOff_dateTime =
-        formatedDropOff.slice(0, 10) + " " + formatedPickUp.slice(11, 19);
+      const orderId = crypto.encrypt(result[a].Order_id);
+      result[a].PickUp_dateTime = dateHandle.formatDateTime(
+        result[a].PickUp_dateTime
+      );
+      result[a].Order_dateTime = dateHandle.formatDateTime(
+        result[a].Order_dateTime
+      );
+      result[a].DropOff_dateTime = dateHandle.formatDateTime(
+        result[a].DropOff_dateTime
+      );
+      result[a].Order_id = orderId;
     }
-    res.status(200).json(result);
+    res.status(200).json({
+      custId: crypto.encrypt(Cust_id),
+      orderList: result,
+    });
   });
 }
 
