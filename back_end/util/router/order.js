@@ -3,6 +3,8 @@ const db = require("../function/dbConnection");
 const router = express.Router();
 const crypto = require("../function/cryptoHandle.js");
 const pdfFactory = require("../function/pdfFactory.js");
+const dateHandle = require("../function/dateHandle.js");
+const payment = require("../function/paymentStripe.js")
 
 // router for user to insert, update and delete order
 router
@@ -51,6 +53,7 @@ router
     },
     getInvoiceInfo,
     getInvoiceNum,
+    // payment.paymentStripe,
     pdfFactory.createInvoice
   )
   .put(getOrderInfo, (req, res) => {
@@ -112,6 +115,7 @@ function getInvoiceInfo(req, res, next) {
   db.query(select_query, [Order_id], (err, result) => {
     if (err) return res.status(500).send(err);
     req.body.InvInfo = result;
+    req.body.bookedDays = dateHandle.getDatesInRange(result[0].PickUp_dateTime, result[0].DropOff_dateTime);
     next();
   });
 }
@@ -119,12 +123,11 @@ function getInvoiceInfo(req, res, next) {
 function getInvoiceNum(req, res, next) {
   const select_query =
     "SELECT count(Order_id) as ordNumTdy FROM orderlist WHERE Date(Order_dateTime) = Date(NOW());";
-  db.query(select_query,
-    (err, result) => {
-      if (err) return res.status(500).send(err);
-      req.body.OrderNumToday = result[0].ordNumTdy
-      next();
-    });
+  db.query(select_query, (err, result) => {
+    if (err) return res.status(500).send(err);
+    req.body.OrderNumToday = result[0].ordNumTdy;
+    next();
+  });
 }
 
 module.exports = router;

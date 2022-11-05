@@ -4,14 +4,14 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 const cors = require("cors");
 
-//Here we are configuring express to use body-parser as middle-ware.
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(cors());
-
 //variable part
 var env = process.env;
 var port = env.PORT || 8080;
+
+//Here we are configuring express to use body-parser as middle-ware.
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cors({ origin: env.ORIGINURL || "*"}));
 
 //const part
 const routerCar = require("./util/router/cars.js");

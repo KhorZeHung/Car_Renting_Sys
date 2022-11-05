@@ -13,8 +13,6 @@ const initVector = new Buffer.from(env.INITVECTOR, "hex");
 const Securitykey = new Buffer.from(env.SECURITYKEY, "hex");
 
 // encrypt the message
-// input encoding
-// output encoding
 function encrypt(message) {
   // the cipher function
   const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);

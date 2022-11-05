@@ -17,7 +17,7 @@ async function createInvoice(req, res) {
       generateFooter(doc);
       doc.end();
       await doc.pipe(fs.createWriteStream("back_end/util/invoice/" + invNum + ".pdf"));
-      res.status(200).download("back_end/util/invoice/" + invNum + ".pdf");
+      res.status(200).download("back_end/util/invoice/" + invNum + ".pdf").redirect(req.url || "http://localhost:8080");
     }
     catch(err){
       console.log(err)
@@ -48,9 +48,9 @@ function generateCustomerInformation(doc, req) {
     Cust_name,
     PickUp_city,
     PickUp_state,
+    bookedDays
   } = req.body.InvInfo;
 
-  const quantity = dateHandle.getDatesInRange(PickUp_dateTime, DropOff_dateTime);
   doc.fillColor("#444444").fontSize(20).text("Invoice", 50, 160);
 
   generateHr(doc, 185);
@@ -70,7 +70,7 @@ function generateCustomerInformation(doc, req) {
     )
     .text("Balance Due:", 50, customerInformationTop + 30)
     .text(
-      formatCurrency(Car_rentPrice * quantity),
+      formatCurrency(Car_rentPrice * bookedDays),
       150,
       customerInformationTop + 30
     )
