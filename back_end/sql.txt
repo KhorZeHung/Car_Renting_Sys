@@ -61,7 +61,7 @@ InvoiceInfo
 - Invoice_totalCharge
 
 CREATE TABLE InvoiceInfo(
-    Invoice_id int NOT NULL UNIQUE, 
+    Invoice_id CHAR(9) NOT NULL UNIQUE, 
     Invoice_date DATETIME NOT NULL, 
     Order_id int NOT NULL,
     PRIMARY KEY(Invoice_id),

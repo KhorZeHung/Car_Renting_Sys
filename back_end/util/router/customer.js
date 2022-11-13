@@ -14,12 +14,13 @@ router.put(
   validateCustInfo.userExits,
   (req, res) => {
     const { Cust_email, Cust_pword, Cust_name, Cust_pnum } = req.body;
+    const Cust_id = crypto.decrypt(req.body.Cust_id);
     bcrypt.hash(Cust_pword, 10, (err, hash) => {
       if (err) return res.sendStatus(500);
-      var update_query = `UPDATE Customer SET Cust_email = ?, Cust_pword = ? , Cust_name = ?, Cust_pnum = ?;`;
+      var update_query = `UPDATE Customer SET Cust_email = ?, Cust_pword = ? , Cust_name = ?, Cust_pnum = ? WHERE Cust_id = ?;`;
       db.query(
         update_query,
-        [Cust_email, hash, Cust_name, Cust_pnum],
+        [Cust_email, hash, Cust_name, Cust_pnum, Cust_id],
         (err, result) => {
           if (err) return res.sendStatus(500);
           res.sendStatus(200);
@@ -69,8 +70,7 @@ router.post(
 
 function getCustOrderInfo(req, res, next) {
   const Cust_id = req.mysqlRes[0].Cust_id;
-  const select_query =
-    "SELECT * FROM OrderList WHERE Cust_id = ?";
+  const select_query = "SELECT * FROM OrderList WHERE Cust_id = ?";
   db.query(select_query, [Cust_id], (err, result) => {
     if (err) return res.status(500).send(err);
     for (var a = 0; a < result.length; a++) {

@@ -9,7 +9,7 @@ const logoPath = "back_end/util/img/lbjlogo.png";
 async function createInvoice(req, res) {
   let doc = new PDFDocument({ size: "A4", margin: 50 });
   const invNum = generateInvNum(req);
-  req.invNum = invNum
+  req.body.invNum = invNum
   try{
       generateHeader(doc);
       generateCustomerInformation(doc, req);
@@ -17,7 +17,7 @@ async function createInvoice(req, res) {
       generateFooter(doc);
       doc.end();
       await doc.pipe(fs.createWriteStream("back_end/util/invoice/" + invNum + ".pdf"));
-      res.status(200).download("back_end/util/invoice/" + invNum + ".pdf").redirect(req.url || "http://localhost:8080");
+      next()
     }
     catch(err){
       console.log(err)
@@ -38,18 +38,16 @@ function generateHeader(doc) {
 }
 
 function generateCustomerInformation(doc, req) {
-  const invNum = req.invNum;
+  const invNum = req.body.invNum;
   const {
     Order_dateTime,
     Car_rentPrice,
-    PickUp_dateTime,
-    DropOff_dateTime,
     PickUp_address,
     Cust_name,
     PickUp_city,
     PickUp_state,
     bookedDays
-  } = req.body.InvInfo;
+  } = req.body.InvInfo[0];
 
   doc.fillColor("#444444").fontSize(20).text("Invoice", 50, 160);
 
@@ -85,6 +83,7 @@ function generateCustomerInformation(doc, req) {
 }
 
 function generateInvoiceTable(doc, req) {
+  
   let i;
   const invoiceTableTop = 330;
 
@@ -100,9 +99,9 @@ function generateInvoiceTable(doc, req) {
   );
   generateHr(doc, invoiceTableTop + 20);
   doc.font("Helvetica");
-
+  
   var subtotal = 0;
-
+  
   for (i = 0; i < req.body.InvInfo.length; i++) {
     const item = req.body.InvInfo[i];
     const position = invoiceTableTop + (i + 1) * 30;
@@ -110,12 +109,13 @@ function generateInvoiceTable(doc, req) {
       doc,
       position,
       item.Car_id,
-      item.Car_brand + " " + item.Car_model,
+      item.Car_brand + " " + item.Car_Model,
       formatCurrency(item.Car_rentPrice),
       item.Order_quantity,
       formatCurrency(item.Car_rentPrice * item.Order_quantity)
     );
-
+    req.body.subtotal = subtotal;
+    
     generateHr(doc, position + 20);
     subtotal += item.Car_rentPrice * item.Order_quantity;
   }

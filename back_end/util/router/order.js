@@ -4,7 +4,8 @@ const router = express.Router();
 const crypto = require("../function/cryptoHandle.js");
 const pdfFactory = require("../function/pdfFactory.js");
 const dateHandle = require("../function/dateHandle.js");
-const payment = require("../function/paymentStripe.js")
+const payment = require("../function/paymentStripe.js");
+const invoice = require("./invoice.js");
 
 // router for user to insert, update and delete order
 router
@@ -54,7 +55,8 @@ router
     getInvoiceInfo,
     getInvoiceNum,
     // payment.paymentStripe,
-    pdfFactory.createInvoice
+    pdfFactory.createInvoice, 
+    invoice.insertInvoiceInfo
   )
   .put(getOrderInfo, (req, res) => {
     const {
@@ -111,11 +113,13 @@ function getOrderInfo(req, res, next) {
 
 function getInvoiceInfo(req, res, next) {
   const Order_id = crypto.decrypt(req.body.Order_id);
-  const select_query = `SELECT o.PickUp_city as PickUp_city, o.PickUp_state as PickUp_state, o.Order_quantity as Order_quantity, cust.Cust_name as Cust_name, o.PickUp_address as PickUp_address, o.Order_id as Order_id, o.Order_dateTime as Order_dateTime, c.Car_brand as Car_brand, c.Car_Model as Car_model, c.Car_rentPrice as Car_rentPrice, c.Car_id as Car_id, o.PickUp_dateTime as PickUp_dateTime, o.DropOff_dateTime as DropOff_dateTime  FROM orderlist as o INNER JOIN car as c ON o.Car_id = c.Car_id INNER JOIN customer as cust ON o.Cust_id = cust.Cust_id WHERE o.Order_id = ?`;
+  const select_query = `SELECT o.Order_id, c.Car_id, c.Car_brand, c.Car_Model, c.Car_rentPrice, o.PickUp_city, o.PickUp_state, o.Order_quantity, cust.Cust_name, o.PickUp_address, o.Order_dateTime, DATEDIFF(o.DropOff_dateTime, o.PickUp_dateTime) as bookedDays  
+  FROM orderlist as o INNER JOIN car as c ON o.Car_id = c.Car_id 
+  INNER JOIN customer as cust ON o.Cust_id = cust.Cust_id 
+  WHERE o.Order_id = ?;`;
   db.query(select_query, [Order_id], (err, result) => {
     if (err) return res.status(500).send(err);
     req.body.InvInfo = result;
-    req.body.bookedDays = dateHandle.getDatesInRange(result[0].PickUp_dateTime, result[0].DropOff_dateTime);
     next();
   });
 }
