@@ -3,8 +3,6 @@ const db = require("../function/dbConnection");
 const router = express.Router();
 const crypto = require("../function/cryptoHandle.js");
 const pdfFactory = require("../function/pdfFactory.js");
-const dateHandle = require("../function/dateHandle.js");
-const payment = require("../function/paymentStripe.js");
 const invoice = require("./invoice.js");
 
 // router for user to insert, update and delete order
@@ -54,7 +52,6 @@ router
     },
     getInvoiceInfo,
     getInvoiceNum,
-    // payment.paymentStripe,
     pdfFactory.createInvoice, 
     invoice.insertInvoiceInfo
   )

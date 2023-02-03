@@ -2,7 +2,7 @@ four big compenent (car, customer, order, invoice)
 
 car
 - "/"
-    - GET 
+    GET 
     return all car info
     [
     {
@@ -14,7 +14,7 @@ car
     ]
     access method = res[0].Car_id;
 
-    - POST 
+    POST 
     add new car to the database
     3 datas needed 
     {
@@ -23,7 +23,7 @@ car
         Car_rentPrice 
     }
 
-    - PUT
+    PUT
     update exiting car in the database
     4 datas needed
     {
@@ -34,8 +34,8 @@ car
     }
 
 - "/:id" (Car_id)   
-    - GET
-    - return all the date where the car is booked
+    GET
+    return all the date where the car is booked
     return
     {
     "carInfo": [
@@ -50,8 +50,9 @@ car
     }
     access method = res.carInfo[0].Car_id
 
-    - DELETE
-    - delete car from the system
+    DELETE
+    delete car from the system
+    data obtain from url
 
 customer
 - "/"
@@ -66,7 +67,7 @@ customer
     }
 
 - "/new"
-    post
+    POST
     new sign up customer
     4 items required
     {
@@ -77,6 +78,91 @@ customer
     }
 
 - "/login"
-    post
-    user login
+    POST
+    user login    
+    2 items required
+    {
+        Cust_email, 
+        Cust_pword
+    }
+
+    return
+    {
+        "custId": "0c66ad63471b4807f34237ed49ae1f85",
+        "orderList": [
+            {
+            "Order_id": "55e7452f91d5a1abae2e0990c65cf49d",
+            "Order_dateTime": "2022-10-30 15:56:47",
+            "PickUp_dateTime": "2022-11-30 08:00:00",
+            "PickUp_address": "5, Jalan Damai Perdana, 1/7B",
+            "DropOff_dateTime": "2022-12-02 08:00:00",
+            "DropOff_address": "43, Jalan Damai Perdana, 1/6B",
+            "Cust_id": 1,
+            "Car_id": 1,
+            "Order_quantity": 1,
+            "PickUp_city": "Bandar Damai Perdana",
+            "PickUp_state": "Cheras",
+            "DropOff_city": "Bandar Damai Perdana",
+            "DropOff_state": "Cheras"
+            },...]
+    }
+
+    access method
+    encrypted order id = res.orderList[0].Order_id
+order
+- "/"
+    POST
+    insert order data to database
+    return an PDF invoice
+    10 datas needed
+    [
+        PickUp_dateTime,
+        PickUp_address,
+        PickUp_city,
+        PickUp_state,
+        DropOff_dateTime,
+        DropOff_address,
+        DropOff_city,
+        DropOff_state,
+        Cust_id,
+        Car_id,
+    ]
+
+    PUT 
+    update existing order
+    max 6 datas needed
+    [
+        Order_id,
+        PickUp_dateTime,
+        PickUp_address,
+        DropOff_dateTime,
+        DropOff_address,
+        Car_id,
+    ] 
+
+    DELETE
+    delete existing order
+    1 data needed
+    [
+        Order_id
+    ]
+
+invoice
+- "/:order_id"
+    GET
+    return invoice information
+    [
+        {
+            "Invoice_id" : "0c66ad63471b4807f34237ed49ae1f85",
+            "Invoice_totalCharge" : "3423.00",
+            "Invoice_date" : "2021-12-12 23:43:33"
+
+        }
+    ]
+
+- "/download/:invoice_id"
+    GET
+    return a PDF of invoice
+    
+    
     

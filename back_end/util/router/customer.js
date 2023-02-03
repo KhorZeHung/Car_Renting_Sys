@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt"); // function to hash and compare password
 const router = express.Router();
 const db = require("../function/dbConnection.js");
 const validateCustInfo = require("../function/validateCustInfo.js"); //import function to validate customer
-const moment = require("moment");
 const crypto = require("../function/cryptoHandle.js");
 const dateHandle = require("../function/dateHandle.js");
 
