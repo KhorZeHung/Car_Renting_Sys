@@ -1,0 +1,82 @@
+four big compenent (car, customer, order, invoice)
+
+car
+- "/"
+    - GET 
+    return all car info
+    [
+    {
+        "Car_id": 1,
+        "Car_brand": "Lamborghini",
+        "Car_model": "Aventador",
+        "Car_rentPrice": 6999.99
+    }
+    ]
+    access method = res[0].Car_id;
+
+    - POST 
+    add new car to the database
+    3 datas needed 
+    {
+        Car_brand, 
+        Car_model, 
+        Car_rentPrice 
+    }
+
+    - PUT
+    update exiting car in the database
+    4 datas needed
+    {
+        Car_id, 
+        Car_brand, 
+        Car_model, 
+        Car_rentPrice
+    }
+
+- "/:id" (Car_id)   
+    - GET
+    - return all the date where the car is booked
+    return
+    {
+    "carInfo": [
+        {
+        "Car_id": 1,
+        "Car_brand": "Lamborghini",
+        "Car_model": "Aventador",
+        "Car_rentPrice": 6999.99
+        }
+    ],
+    "orderList": []
+    }
+    access method = res.carInfo[0].Car_id
+
+    - DELETE
+    - delete car from the system
+
+customer
+- "/"
+    PUT
+    update customer info
+    max 4 items required
+    {
+        Cust_email, 
+        Cust_pword, 
+        Cust_name, 
+        Cust_pnum 
+    }
+
+- "/new"
+    post
+    new sign up customer
+    4 items required
+    {
+        Cust_email, 
+        Cust_pword, 
+        Cust_name, 
+        Cust_pnum 
+    }
+
+- "/login"
+    post
+    user login
+    
